@@ -1,15 +1,16 @@
 import { useState, useContext } from 'react'
-import { ButtonsContext } from './Buttons/ButtonsContext'
+import { InputContext } from './App'
 
 export default function Display() {
+  const [inputVal, setInputVal] = useState('Введите значение')
 
-  const funcs = useContext(ButtonsContext)
+	const val = useContext(InputContext)
 
   return (
     <input
       className="input"
       placeholder={'Введите значение'}
-      value={funcs.input}
+      value={val}
       readOnly
     ></input>
   )
