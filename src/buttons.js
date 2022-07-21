@@ -1,4 +1,5 @@
 export default function Buttons({changeInput,clearInput,add,sub,mult,div,solve}) {
+
   return (
     <div className="buttons">
       <button onClick={() => clearInput()}className="btn btnClear">C</button>

@@ -1,10 +1,10 @@
 import { useState, useContext } from 'react'
-import { AlertContext } from './App'
+import { InputContext } from './App'
 
 export default function Display() {
   const [inputVal, setInputVal] = useState('Введите значение')
 
-	const val = useContext(AlertContext)
+	const val = useContext(InputContext)
 
   return (
     <input

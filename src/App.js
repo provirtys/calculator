@@ -1,32 +1,88 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import './App.css'
 import Buttons from './buttons'
 import Display from './display'
 
-export const AlertContext = createContext()
+export const InputContext = createContext()
 
 function App() {
   const [inputVal, setInputVal] = useState('')
-  const [memorizedNumber, setMemorizedNumber] = useState(false)
+  const [firstNumber, setFirstNumber] = useState(false)
+  const [secondNumber, setSecondNumber] = useState(false)
   const [action, setAction] = useState(false)
   const [curAction, setCurAction] = useState('')
-  const [result, setResult] = useState('')
+
+  useEffect(() => {
+    const listener = (event) => {
+      switch (event.key) {
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '0':
+        case '.':
+          changeInput(event.key)
+          break
+        case 'Escape':
+          clearInput()
+          break
+        case '+':
+          add()
+          break
+        case '-':
+          sub()
+          break
+        case '*':
+          mult()
+          break
+        case '/':
+          div()
+          break
+        case 'Enter':
+          solve()
+          break
+      }
+    }
+    document.addEventListener('keydown', listener)
+    return () => {
+      document.removeEventListener('keydown', listener)
+    }
+  }, [inputVal, action])
+
   function changeInput(val) {
+    // console.log(firstNumber);
+    // console.log(secondNumber);
     if (action) {
       setCurAction(action)
       setAction(false)
-      setMemorizedNumber(inputVal)
       setInputVal(val.toString())
+      setSecondNumber(val)
+      // console.log('second number:', val.toString())
     } else {
-      if(val != '.' || !inputVal.includes('.')){
+      if (val != '.' || !inputVal.includes('.')) {
+        setAction(false)
         setInputVal(inputVal + val.toString())
+        if (curAction == '') {
+          setFirstNumber(inputVal + val.toString())
+          // console.log('first number:', inputVal + val.toString())
+        } else {
+          setSecondNumber(inputVal + val.toString())
+          // console.log('second number:', inputVal + val.toString())
+        }
       }
     }
   }
   function clearInput() {
     setInputVal('')
+    setFirstNumber('')
+    setSecondNumber('')
     setAction(false)
-    setMemorizedNumber(false)
+    setCurAction(false)
   }
   function add() {
     setAction('+')
@@ -41,43 +97,40 @@ function App() {
     setAction('/')
   }
   function solve() {
-    console.log(memorizedNumber);
-    console.log(curAction);
-    console.log(inputVal);
+    console.log(firstNumber);
+    console.log(secondNumber);
     let newVal = null
     switch (curAction) {
       case '+': {
-        console.log("plus");
-        newVal = (+memorizedNumber + +inputVal).toString()
+        newVal = (+firstNumber + +secondNumber).toString()
         break
       }
       case '-': {
-        console.log("minus");
-
-        newVal = (+memorizedNumber - +inputVal).toString()
+        newVal = (+firstNumber - +secondNumber).toString()
         break
       }
       case '*': {
-        console.log("mult");
-
-        newVal = (+memorizedNumber * +inputVal).toString()
+        newVal = (+firstNumber * +secondNumber).toString()
         break
       }
       case '/': {
-        console.log("divide");
-
-        newVal = (+memorizedNumber / +inputVal).toString()
+        newVal = (+firstNumber / +secondNumber).toString()
+        break
+      }
+      default: {
+        newVal = inputVal
         break
       }
     }
     setInputVal(newVal)
+    setFirstNumber(newVal)
   }
 
   return (
     <div className="wrapper">
       <div className="container">
         <div className="body">
-          <AlertContext.Provider value={inputVal}>
+          <InputContext.Provider value={inputVal}>
             <Display />
             <Buttons
               changeInput={changeInput}
@@ -88,7 +141,7 @@ function App() {
               div={div}
               solve={solve}
             />
-          </AlertContext.Provider>
+          </InputContext.Provider>
         </div>
       </div>
     </div>
