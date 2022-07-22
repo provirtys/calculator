@@ -3,6 +3,7 @@ import './App.css'
 import Buttons from './Buttons/buttons'
 import { ButtonsProvider } from './Buttons/ButtonsContext'
 import Display from './display'
+import Side from './Side/side'
 
 export const InputContext = createContext()
 
@@ -10,12 +11,13 @@ function App() {
   return (
     <div className="wrapper">
       <div className="container">
+      <ButtonsProvider>
         <div className="body">
-          <ButtonsProvider>
               <Display />
               <Buttons />
-          </ButtonsProvider>
         </div>
+        <Side />
+        </ButtonsProvider>
       </div>
     </div>
   )

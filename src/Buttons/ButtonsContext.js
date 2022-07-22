@@ -8,9 +8,8 @@ export const ButtonsProvider = ({ children }) => {
   const [secondNumber, setSecondNumber] = useState(false)
   const [action, setAction] = useState(false)
   const [curAction, setCurAction] = useState(false)
-
-console.log(inputVal,firstNumber,secondNumber,action,curAction);
-
+  const [sideInput,setSideInput] = useState('')
+  const [sideInputArr, setSideInputArr] = useState([''])
   useEffect(() => {
     const listener = (event) => {
       switch (event.key) {
@@ -31,16 +30,10 @@ console.log(inputVal,firstNumber,secondNumber,action,curAction);
           clearInput()
           break
         case '+':
-          add()
-          break
         case '-':
-          sub()
-          break
         case '*':
-          mult()
-          break
         case '/':
-          div()
+          chooseAction(event.key)
           break
         case 'Enter':
           solve()
@@ -59,10 +52,15 @@ console.log(inputVal,firstNumber,secondNumber,action,curAction);
       setAction(false)
       setInputVal(val.toString())
       setSecondNumber(val)
+      setSideInput(sideInput + val.toString())
+      sideInputArr[sideInputArr.length-1] += val.toString()
     } else {
       if (val != '.' || !inputVal.includes('.')) {
         setAction(false)
+        // setCurAction(false)
         setInputVal(inputVal + val.toString())
+        setSideInput(sideInput + val.toString())
+        sideInputArr[sideInputArr.length-1] += val.toString()
         if (curAction == '') {
           setFirstNumber(inputVal + val.toString())
         } else {
@@ -71,25 +69,34 @@ console.log(inputVal,firstNumber,secondNumber,action,curAction);
       }
     }
   }
+
+
+
   function clearInput() {
     setInputVal('')
     setFirstNumber(false)
     setSecondNumber(false)
     setAction(false)
     setCurAction(false)
+    setSideInput('')
+    setSideInputArr([''])
   }
-  function add() {
-    setAction('+')
+  function chooseAction(act) {
+    setAction(act)
+    if(action){
+      setSideInput(sideInput.substring(0,sideInput.length-3) + ` ${act} `)
+      sideInputArr[sideInputArr.length-1] = firstNumber + ` ${act} `
+
+
+    }
+    else{
+      setSideInput(sideInput + ` ${act} `)
+      sideInputArr[sideInputArr.length-1] = firstNumber + ` ${act} `
+
+    }
+
   }
-  function sub() {
-    setAction('-')
-  }
-  function mult() {
-    setAction('*')
-  }
-  function div() {
-    setAction('/')
-  }
+
   function solve() {
     let newVal = null
     switch (curAction) {
@@ -114,8 +121,14 @@ console.log(inputVal,firstNumber,secondNumber,action,curAction);
         break
       }
     }
+    newVal = Math.round(newVal * 100)/100
     setInputVal(newVal)
     setFirstNumber(newVal)
+    setSideInput(sideInput + ' = ' + newVal)
+    sideInputArr[sideInputArr.length-1] = firstNumber +  ` ${curAction} ` + secondNumber + ' = ' + newVal
+    setSideInput('')
+    sideInputArr.push('')
+    
   }
 
   return (
@@ -124,11 +137,10 @@ console.log(inputVal,firstNumber,secondNumber,action,curAction);
         input: inputVal,
         changeInput,
         clearInput,
-        add,
-        sub,
-        mult,
-        div,
+        chooseAction,
         solve,
+        sideInput,
+        sideInputArr,
       }}
     >
       {children}

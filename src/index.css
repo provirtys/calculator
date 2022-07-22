@@ -12,25 +12,46 @@ code {
     monospace;
 }
 
+p{
+  margin: 0px;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
 .wrapper{
   height: 100vh;
-}
-.container{
   display: flex;
-  height: 100vh;
   justify-content: center;
   align-items: center;
 }
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 520px;
+}
 
 .body{
-  max-width: 500px;
-  max-height: 500px;
   padding: 20px;
   border: 1px solid #000;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
 }
+.side{
+  font-size: 20px;
+  border: 1px solid #000;
+  align-self: stretch;
+  border-left: none;
+  margin-left: -15px;
+  padding: 20px 20px 20px 30px;
+  flex:0 0 200px;
+  word-wrap: break-word;
+  overflow-y: scroll;
+}
+
+
 .buttons{
   display: grid;
   grid-template: 1fr 1fr 1fr 1fr 1fr  / 1fr 1fr 1fr 1fr;
@@ -38,7 +59,7 @@ code {
 }
 
 .input{
-  font-size: 30px;
+  font-size: 25px;
   margin-bottom: 10px;
   padding: 10px;
 }
