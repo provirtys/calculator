@@ -10,6 +10,8 @@ export const ButtonsProvider = ({ children }) => {
   const [curAction, setCurAction] = useState(false)
   const [sideInput,setSideInput] = useState('')
   const [sideInputArr, setSideInputArr] = useState([''])
+  const [sideActive, setSideActive] = useState(false)
+
   useEffect(() => {
     const listener = (event) => {
       switch (event.key) {
@@ -131,6 +133,10 @@ export const ButtonsProvider = ({ children }) => {
     
   }
 
+  function toggleSide(){
+    setSideActive(prev => !prev)
+  }
+
   return (
     <ButtonsContext.Provider
       value={{
@@ -141,6 +147,8 @@ export const ButtonsProvider = ({ children }) => {
         solve,
         sideInput,
         sideInputArr,
+        sideActive,
+        toggleSide,
       }}
     >
       {children}
